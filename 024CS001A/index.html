@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Visualizador IFC - 024CS001A</title>
+  <style>
+    html, body { margin: 0; height: 100%; overflow: hidden; }
+    canvas { width: 100%; height: 100%; display: block; }
+  </style>
+</head>
+<body>
+  <script type="module">
+    import * as THREE from 'https://unpkg.com/three@0.150.1/build/three.module.js';
+    import { OrbitControls } from 'https://unpkg.com/three@0.150.1/examples/jsm/controls/OrbitControls.js';
+    import { IFCLoader } from 'https://unpkg.com/web-ifc-three/IFCLoader.js';
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    const light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(5, 10, 5);
+    scene.add(light);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+
+    const loader = new IFCLoader();
+    loader.ifcManager.setWasmPath('https://unpkg.com/web-ifc@0.0.38/');
+
+    // 🔧 Nome EXATO do arquivo IFC no mesmo diretório
+    loader.load('024CS001A.ifc', (ifcModel) => {
+      scene.add(ifcModel);
+    });
+
+    camera.position.set(10, 10, 10);
+    controls.update();
+
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
