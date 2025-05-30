@@ -30,7 +30,6 @@
     const loader = new IFCLoader();
     loader.ifcManager.setWasmPath('https://unpkg.com/web-ifc@0.0.38/');
 
-    // 🔧 Nome EXATO do arquivo IFC no mesmo diretório
     loader.load('024CS001A.ifc', (ifcModel) => {
       scene.add(ifcModel);
     });
